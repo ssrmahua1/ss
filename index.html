@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Smart Capture Scanner</title>
+
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        :root { --primary: #007AFF; --success: #34C759; --danger: #FF3B30; --gray: #8E8E93; }
+        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
+
+        /* Camera Viewport */
+        #viewport { width: 100%; height: 220px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; flex-shrink: 0; border-bottom: 1px solid #eee; }
+        #crop-container { position: relative; width: 280px; height: 100px; border: 3px solid var(--success); border-radius: 10px; overflow: hidden; background: #000; }
+        video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; }
+        #scan-line { position: absolute; width: 100%; height: 2px; background: red; box-shadow: 0 0 8px red; animation: move 1.5s infinite linear; }
+        @keyframes move { 0%, 100% { top: 10%; } 50% { top: 90%; } }
+
+        /* Toggle & Controls */
+        .settings-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+        .toggle-container { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; color: #444; }
+        
+        /* iOS Style Switch */
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .controls { display: flex; gap: 8px; padding: 10px; background: #fff; }
+        button { flex: 1; height: 44px; border: none; border-radius: 8px; font-weight: 700; color: #fff; cursor: pointer; font-size: 13px; }
+        #btn-start { background: var(--success); }
+        #btn-stop { background: var(--danger); }
+        #btn-excel { background: var(--primary); }
+        button:disabled { opacity: 0.3; }
+
+        /* Table Area - Super Clean */
+        .list-area { flex: 1; overflow-y: auto; background: #fff; }
+        table { width: 100%; border-collapse: collapse; }
+        th { position: sticky; top: 0; background: #fcfcfc; padding: 12px; font-size: 10px; color: #999; border-bottom: 1px solid #eee; text-transform: uppercase; }
+        td { padding: 10px; border-bottom: 1px solid #f9f9f9; text-align: center; font-size: 13px; }
+        .thumb { width: 80px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; background: #fafafa; }
+        .no-photo { color: #ccc; font-style: italic; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+    <div id="viewport">
+        <div id="crop-container">
+            <video id="video"></video>
+            <div id="scan-line"></div>
+        </div>
+    </div>
+
+    <div class="settings-bar">
+        <div class="toggle-container">
+            📸 Capture Photo
+            <label class="switch">
+                <input type="checkbox" id="photo-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div id="status" style="font-size: 11px; color: var(--gray);">Ready</div>
+    </div>
+
+    <div class="controls">
+        <button id="btn-start">START</button>
+        <button id="btn-stop" disabled>STOP</button>
+        <button id="btn-excel">SAVE EXCEL</button>
+    </div>
+
+    <div class="list-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Barcode</th>
+                    <th>Photo</th>
+                    <th>Label</th>
+                </tr>
+            </thead>
+            <tbody id="scan-body"></tbody>
+        </table>
+    </div>
+
+    <canvas id="proc-cvs" style="display:none;"></canvas>
+    <canvas id="bar-cvs" style="display:none;"></canvas>
+
+    <script>
+        const codeReader = new ZXing.BrowserMultiFormatReader();
+        const scanBody = document.getElementById('scan-body');
+        const photoToggle = document.getElementById('photo-toggle');
+        let dataStore = [];
+        let scannedSet = new Set();
+        let isBusy = false;
+
+        async function start() {
+            document.getElementById('btn-start').disabled = true;
+            document.getElementById('btn-stop').disabled = false;
+            document.getElementById('status').innerText = "Scanning...";
+
+            codeReader.decodeFromConstraints({
+                video: { facingMode: "environment", frameRate: { ideal: 60 } }
+            }, "video", (result) => {
+                if (result && !isBusy) {
+                    const text = result.text;
+                    if (scannedSet.has(text)) return;
+                    
+                    isBusy = true;
+                    scannedSet.add(text);
+                    if (navigator.vibrate) navigator.vibrate(40);
+
+                    let photoData = null;
+                    const isPhotoEnabled = photoToggle.checked;
+
+                    // 1. CAPTURE ONLY IF TOGGLE IS ON
+                    if (isPhotoEnabled) {
+                        const video = document.getElementById('video');
+                        const canvas = document.getElementById('proc-cvs');
+                        const ctx = canvas.getContext('2d');
+                        const vW = video.videoWidth;
+                        const vH = video.videoHeight;
+                        
+                        // Exact center crop matching 280:100 ratio
+                        const boxRatio = 280 / 100;
+                        let sW, sH, sX, sY;
+                        if ((vW/vH) > boxRatio) {
+                            sH = vH; sW = vH * boxRatio; sX = (vW - sW) / 2; sY = 0;
+                        } else {
+                            sW = vW; sH = vW / boxRatio; sX = 0; sY = (vH - sH) / 2;
+                        }
+                        canvas.width = 280; canvas.height = 100;
+                        ctx.drawImage(video, sX, sY, sW, sH, 0, 0, 280, 100);
+                        photoData = canvas.toDataURL("image/jpeg", 0.7);
+                    }
+
+                    // 2. ALWAYS GEN BARCODE LABEL
+                    const bCanvas = document.getElementById('bar-cvs');
+                    JsBarcode(bCanvas, text, { format: "CODE128", width: 2, height: 40 });
+                    const barImg = bCanvas.toDataURL("image/png");
+
+                    // 3. STORE & UI
+                    const entry = { sno: dataStore.length + 1, val: text, photo: photoData, bar: barImg };
+                    dataStore.push(entry);
+
+                    const photoHTML = isPhotoEnabled ? `<img src="${photoData}" class="thumb">` : `<span class="no-photo">Skipped</span>`;
+
+                    const row = `<tr>
+                        <td>${entry.sno}</td>
+                        <td style="font-weight:bold">${entry.val}</td>
+                        <td>${photoHTML}</td>
+                        <td><img src="${barImg}" class="thumb"></td>
+                    </tr>`;
+                    scanBody.insertAdjacentHTML('afterbegin', row);
+
+                    setTimeout(() => { isBusy = false; }, 1000);
+                }
+            });
+        }
+
+        async function downloadExcel() {
+            if (!dataStore.length) return;
+            const wb = new ExcelJS.Workbook();
+            const ws = wb.addWorksheet("Inventory");
+            
+            ws.columns = [
+                { header: "S.No", key: "sno", width: 8 },
+                { header: "Value", key: "val", width: 25 },
+                { header: "Photo", width: 25 },
+                { header: "Barcode Label", width: 25 }
+            ];
+
+            dataStore.forEach((item, i) => {
+                const row = ws.addRow({ sno: item.sno, val: item.val });
+                row.height = 70;
+                
+                // Add photo only if it exists
+                if (item.photo) {
+                    ws.addImage(wb.addImage({ base64: item.photo, extension: 'jpeg' }), {
+                        tl: { col: 2, row: i + 1 }, ext: { width: 150, height: 70 }
+                    });
+                }
+                
+                // Always add barcode label
+                ws.addImage(wb.addImage({ base64: item.bar, extension: 'png' }), {
+                    tl: { col: 3, row: i + 1 }, ext: { width: 150, height: 70 }
+                });
+            });
+
+            const buf = await wb.xlsx.writeBuffer();
+            saveAs(new Blob([buf]), "Smart_Inventory_Report.xlsx");
+        }
+
+        document.getElementById('btn-start').onclick = start;
+        document.getElementById('btn-stop').onclick = () => { codeReader.reset(); location.reload(); };
+        document.getElementById('btn-excel').onclick = downloadExcel;
+    </script>
+</body>
+</html>
