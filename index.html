@@ -1,141 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accenture Visitor ID</title>
+<meta charset="utf-8">
+<title>Accenture Visitor ID Generator</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 body{
-    background:#f0f2f5;
-    font-family:Arial, sans-serif;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:30px;
+font-family:Arial,sans-serif;
+background:#f2f2f2;
+padding:20px;
+}
+
+.container{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.form{
+width:300px;
+background:#fff;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+
+.form input{
+width:100%;
+padding:10px;
+margin:8px 0;
 }
 
 .card{
-    width:900px;
-    background:white;
-    border-radius:25px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.2);
+width:900px;
+background:white;
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
 
 .header{
-    background:#ffffff;
-    padding:20px 30px;
+padding:20px;
+font-size:60px;
+font-weight:bold;
 }
 
-.logo{
-    font-size:70px;
-    font-weight:bold;
-    color:black;
+.header span{
+color:#8a00ff;
 }
 
-.logo span{
-    color:#a100ff;
-}
-
-.main{
-    display:flex;
-    padding:20px;
+.content{
+display:flex;
+padding:20px;
 }
 
 .photo{
-    width:220px;
-    height:280px;
-    border:4px solid #7b00ff;
-    border-radius:20px;
-    overflow:hidden;
+width:220px;
+height:280px;
+border:4px solid #8a00ff;
+border-radius:20px;
+overflow:hidden;
 }
 
 .photo img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .details{
-    flex:1;
-    padding-left:30px;
+flex:1;
+padding-left:25px;
 }
 
 .visitor{
-    color:#5e00d6;
-    font-size:60px;
-    font-weight:bold;
+font-size:60px;
+font-weight:bold;
+color:#6a00ff;
 }
 
 .pass{
-    letter-spacing:10px;
-    font-size:28px;
+font-size:28px;
+letter-spacing:10px;
 }
 
 .info{
-    margin-top:20px;
+margin-top:15px;
 }
 
-.info h3{
-    color:#666;
-    margin-bottom:5px;
+.info label{
+display:block;
+color:#666;
+font-size:18px;
 }
 
-.info p{
-    font-size:22px;
-    font-weight:bold;
-    margin-top:0;
+.info div{
+font-size:30px;
+font-weight:bold;
 }
 
-.qr{
-    width:220px;
-    text-align:center;
-}
-
-.qr img{
-    width:200px;
-    border:5px solid #7b00ff;
-    border-radius:15px;
+#qrcode{
+padding:10px;
+background:white;
+border:4px solid #8a00ff;
+border-radius:15px;
 }
 
 .footer{
-    background:#4b0082;
-    color:white;
-    display:flex;
-    justify-content:space-around;
-    padding:20px;
-    font-size:22px;
-    font-weight:bold;
+background:#4d008c;
+color:white;
+display:flex;
+justify-content:space-around;
+padding:20px;
+font-size:22px;
+font-weight:bold;
 }
 
 button{
-    margin-top:20px;
-    padding:12px 30px;
-    border:none;
-    background:#7b00ff;
-    color:white;
-    font-size:18px;
-    border-radius:10px;
-    cursor:pointer;
+padding:12px 20px;
+border:none;
+background:#8a00ff;
+color:white;
+cursor:pointer;
+margin-top:10px;
+border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="idcard">
+<div class="container">
 
-<div class="header">
-<div class="logo">accenture<span>></span></div>
+<div class="form">
+<h2>Visitor Details</h2>
+
+<input id="name" placeholder="Name" value="Tabrez">
+<input id="mobile" placeholder="Mobile" value="9876543210">
+<input id="company" placeholder="Company" value="JCI">
+<input id="visitorid" placeholder="ID" value="ABC123">
+<input id="valid" placeholder="Valid Upto" value="12 PM Today">
+
+<input type="file" id="photo">
+
+<button onclick="updateCard()">Generate</button>
+<button onclick="downloadCard()">Download PNG</button>
+
 </div>
 
-<div class="main">
+<div id="card" class="card">
+
+<div class="header">
+accenture<span>></span>
+</div>
+
+<div class="content">
 
 <div class="photo">
-<img src="https://via.placeholder.com/220x280.png?text=PHOTO">
+<img id="preview"
+src="https://via.placeholder.com/220x280">
 </div>
 
 <div class="details">
@@ -144,46 +170,89 @@ button{
 <div class="pass">PASS</div>
 
 <div class="info">
-<h3>NAME</h3>
-<p>TABREZ</p>
+<label>NAME</label>
+<div id="vname">Tabrez</div>
 </div>
 
 <div class="info">
-<h3>MOBILE</h3>
-<p>9876543210</p>
+<label>MOBILE</label>
+<div id="vmobile">9876543210</div>
 </div>
 
 <div class="info">
-<h3>COMPANY</h3>
-<p>JCI</p>
+<label>COMPANY</label>
+<div id="vcompany">JCI</div>
 </div>
 
 </div>
 
-<div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ABC123">
-</div>
+<div id="qrcode"></div>
 
 </div>
 
 <div class="footer">
-<div>VALID UPTO : 12 PM TODAY</div>
-<div>ID : ABC123</div>
+<div id="vvalid">12 PM Today</div>
+<div id="vid">ABC123</div>
 </div>
 
 </div>
 
-<button onclick="downloadCard()">Download ID Card</button>
+</div>
 
 <script>
-function downloadCard() {
-    html2canvas(document.getElementById("idcard")).then(canvas => {
-        let link = document.createElement("a");
-        link.download = "Accenture_Visitor_ID.png";
-        link.href = canvas.toDataURL();
-        link.click();
-    });
+
+let qr;
+
+function updateCard(){
+
+let name=document.getElementById('name').value;
+let mobile=document.getElementById('mobile').value;
+let company=document.getElementById('company').value;
+let id=document.getElementById('visitorid').value;
+let valid=document.getElementById('valid').value;
+
+document.getElementById('vname').innerText=name;
+document.getElementById('vmobile').innerText=mobile;
+document.getElementById('vcompany').innerText=company;
+document.getElementById('vid').innerText='ID : '+id;
+document.getElementById('vvalid').innerText='VALID : '+valid;
+
+document.getElementById('qrcode').innerHTML='';
+
+new QRCode(document.getElementById("qrcode"),{
+text:`${name} | ${mobile} | ${company} | ${id}`,
+width:180,
+height:180
+});
 }
+
+document.getElementById('photo').addEventListener('change',function(e){
+
+const reader=new FileReader();
+
+reader.onload=function(){
+document.getElementById('preview').src=reader.result;
+}
+
+reader.readAsDataURL(e.target.files[0]);
+
+});
+
+function downloadCard(){
+
+html2canvas(document.getElementById('card')).then(canvas=>{
+
+let link=document.createElement('a');
+link.download='Visitor_ID.png';
+link.href=canvas.toDataURL();
+link.click();
+
+});
+
+}
+
+updateCard();
+
 </script>
 
 </body>
