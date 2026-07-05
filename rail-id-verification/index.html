@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Chandu Sanitation pay and use id card verification</title>
+  <meta name="description" content="Official employee identity verification registry for Chandu Sanitation Workers Welfare Association, Hazrat Nizamuddin Station.">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Screenshot/Print Protection Overlay -->
+  <div class="screen-protection-overlay" id="protectionOverlay">
+    <div class="protection-message">
+      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: #dc2626; margin-bottom: 1rem;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <h2>SCREENSHOT PROTECTION ACTIVE</h2>
+      <p>Security protocols prevent capturing page contents when inactive.</p>
+    </div>
+  </div>
+
+  <!-- Clean Portal Header -->
+  <header class="portal-header">
+    <div class="header-logo-row">
+      <svg class="rail-logo" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0056b3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      </svg>
+      <div class="logo-title-group">
+        <h1>Chandu Sanitation Workers Welfare Assosiation</h1>
+        <p>Hazrat Nizamuddin Station — Staff Pay & Use ID Card Verification Portal</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="portal-wrapper">
+    
+    <!-- Search Box Card -->
+    <section class="search-card">
+      <div class="search-card-header">
+        <h2>Verify Staff Identity</h2>
+        <p>Enter the employee's ID number below to search the database and display their work details and photos.</p>
+      </div>
+      
+      <form class="verification-form" id="searchForm">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="e.g. NZM-B-04" 
+          autocomplete="off" 
+          required
+        >
+        <button type="submit" class="search-btn">Verify Credentials</button>
+      </form>
+    </section>
+
+    <!-- Verification Results Area (hidden by default) -->
+    <section class="result-card-container" id="resultSection" style="display: none;">
+      
+      <!-- Status Banner -->
+      <div class="status-banner" id="statusBanner">
+        <!-- Filled by JS (Verified / Denied) -->
+      </div>
+
+      <!-- Main Profile details -->
+      <div class="profile-layout-grid" style="position: relative; overflow: hidden;">
+        <!-- Red Digital Stamp Watermark -->
+        <div class="digital-format-stamp">यह डिजिटल प्रारूप है / DIGITAL FORMAT ONLY</div>
+        
+        <!-- Left: Face Photo -->
+        <div class="photo-column">
+          <div class="profile-photo-box">
+            <img id="employeePhoto" src="" alt="Employee Photo">
+          </div>
+          <div class="profile-badge-active" id="employeeStatusBadge">ACTIVE STATUS</div>
+        </div>
+
+        <!-- Right: Tabular details -->
+        <div class="details-column">
+          <div class="station-meta-badge" id="cardStationBadge">HAZRAT NIZAMUDDIN STATION</div>
+          
+          <table class="details-table">
+            <tr>
+              <th>Employee Name</th>
+              <td id="valName" class="val-name">-</td>
+            </tr>
+            <tr>
+              <th>Designation</th>
+              <td id="valDesig">-</td>
+            </tr>
+            <tr>
+              <th>Employee ID</th>
+              <td id="valId" class="val-mono">-</td>
+            </tr>
+            <tr>
+              <th>Aadhar Number</th>
+              <td id="valAadhar">-</td>
+            </tr>
+            <tr>
+              <th>Phone Number</th>
+              <td id="valPhone">-</td>
+            </tr>
+            <tr>
+              <th>Validity Period</th>
+              <td id="valValidity">-</td>
+            </tr>
+          </table>
+          <div class="digital-warning-banner">
+            यह डिजिटल प्रारूप है / THIS IS A DIGITAL FORMAT ONLY
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Action Toggles -->
+      <div class="profile-actions-bar">
+        <button type="button" class="action-toggle-btn" id="btnToggleCard">View Original ID Card</button>
+        <button type="button" class="action-print-btn" id="btnPrint">Print Verification Receipt</button>
+      </div>
+
+      <!-- Scanned Physical Card View Area (toggled by JS) -->
+      <div class="original-card-panel" id="originalCardContainer" style="display: none;">
+        <div class="panel-header">
+          <span>ORIGINAL PHYSICAL ID CARD SCAN</span>
+        </div>
+        <div class="panel-body">
+          <div class="physical-image-wrapper">
+            <img id="originalScanImg" src="" alt="Physical Card Scan">
+            <!-- Diagonal security overlay watermark -->
+            <div class="physical-card-overlay-watermark">DIGITAL FORMAT ONLY • FOR VERIFICATION ONLY • केवल डिजिटल प्रारूप</div>
+          </div>
+          <p class="image-footnote" id="originalScanMeta">File Name Reference: NZM-B-04.jpg</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Print Receipt Box - Visible only during printing -->
+  <div class="print-receipt-certificate" id="printReceiptBox">
+    <div class="receipt-header">
+      OFFICIAL IDENTITY VERIFICATION RECEIPT<br>
+      <span style="font-size: 9pt; font-weight: normal; color: #555555;">Northern Railway - Hazrat Nizamuddin Attendant Registry</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Employee Name:</span>
+      <span id="rName">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Employee ID No:</span>
+      <span id="rId">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Aadhar Registration:</span>
+      <span id="rAadhar">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Registered Phone:</span>
+      <span id="rPhone">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Assigned Work Station:</span>
+      <span id="rStation">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Assigned Validity Period:</span>
+      <span id="rValidity">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Verification Status:</span>
+      <span id="rStatus" style="font-weight: bold;">-</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Verification Timestamp:</span>
+      <span id="rTime">-</span>
+    </div>
+    <div class="receipt-row" style="margin-bottom: 25px;">
+      <span class="receipt-label">Cryptographic Signature:</span>
+      <span id="rHash" style="font-family: monospace; font-size: 8pt; color: #333333;">-</span>
+    </div>
+    
+    <div class="receipt-footer">
+      This is a system-generated cryptographic verification document from the Northern Railway registry database.<br>
+      No physical signature is required. Certified Authentic.
+    </div>
+  </div>
+
+  <!-- Clean Footer -->
+  <footer class="portal-footer">
+    <p>&copy; 2026 Northern Railway Registry Division. All rights reserved.</p>
+    <div class="footer-meta-links">
+      <span>Official Portal</span> &bull; <span>Verified Database</span> &bull; <span>Indian Railways Registry</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,749 @@
+/* ==========================================================================
+   Indian Railways ID Verification Portal - Clean Light Theme Styling
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-color: #0f46a0;      /* Railway Blue */
+  --primary-hover: #0a337a;
+  --bg-body: #f8fafc;            /* Clean light grey */
+  --bg-card: #ffffff;            /* White panels */
+  --text-dark: #0f172a;          /* Slate 900 */
+  --text-muted: #475569;         /* Slate 600 */
+  --border-color: #e2e8f0;       /* Slate 200 */
+  --success-bg: #ecfdf5;         /* Emerald 50 */
+  --success-text: #065f46;       /* Emerald 800 */
+  --success-border: #a7f3d0;     /* Emerald 200 */
+  --error-bg: #fef2f2;           /* Red 50 */
+  --error-text: #991b1b;         /* Red 800 */
+  --error-border: #fecaca;       /* Red 200 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-dark);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.portal-header {
+  background-color: #ffffff;
+  border-bottom: 3px solid var(--primary-color);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-logo-row {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.rail-logo {
+  flex-shrink: 0;
+}
+
+.logo-title-group h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+}
+
+.logo-title-group p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Portal Container */
+.portal-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Search Card */
+.search-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.search-card-header {
+  margin-bottom: 1.5rem;
+}
+
+.search-card-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.35rem;
+}
+
+.search-card-header p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.verification-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.verification-form input {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.verification-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(15, 70, 160, 0.15);
+}
+
+.search-btn {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1.25rem;
+}
+
+.quick-links span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.tag-btn {
+  background-color: #f1f5f9;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tag-btn:hover {
+  background-color: #e2e8f0;
+  color: var(--text-dark);
+}
+
+/* Results Card Section */
+.result-card-container {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Status Banner */
+.status-banner {
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid transparent;
+}
+
+.status-verified {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border-bottom-color: var(--success-border);
+}
+
+.status-denied {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border-bottom-color: var(--error-border);
+}
+
+/* Profile details block */
+.profile-layout-grid {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 600px) {
+  .profile-layout-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.photo-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-photo-box {
+  width: 110px;
+  height: 135px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f8fafc;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-badge-active {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.status-active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.details-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.station-meta-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  background-color: rgba(15, 70, 160, 0.06);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-table th, .details-table td {
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: left;
+}
+
+.details-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+  width: 150px;
+}
+
+.details-table td {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.details-table td.val-name {
+  font-size: 1.05rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.details-table td.val-mono {
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.88rem;
+}
+
+/* Action buttons block */
+.profile-actions-bar {
+  padding: 0 2rem 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .profile-actions-bar {
+    flex-direction: column;
+  }
+}
+
+.action-toggle-btn {
+  background-color: #f1f5f9;
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+  border-radius: 6px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-toggle-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.action-print-btn {
+  background-color: transparent;
+  border: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 6px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-print-btn:hover {
+  background-color: rgba(15, 70, 160, 0.05);
+}
+
+/* Original Card Panel Area */
+.original-card-panel {
+  border-top: 1px solid var(--border-color);
+  background-color: #fafbfc;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.original-card-panel .panel-header {
+  padding: 1rem 2rem 0.5rem 2rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.original-card-panel .panel-body {
+  padding: 0.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.original-card-panel img {
+  max-width: 100%;
+  width: 480px;
+  height: auto;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.original-card-panel .image-footnote {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'Fira Mono', monospace;
+}
+
+/* Clean Footer */
+.portal-footer {
+  background-color: #ffffff;
+  border-top: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-meta-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   Print Layout System
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .portal-header, .search-card, .result-card-container, .portal-footer {
+    display: none !important;
+  }
+  
+  .print-receipt-certificate {
+    display: block !important;
+    margin: 1.5cm auto;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 10pt;
+    line-height: 1.6;
+    max-width: 15cm;
+  }
+  
+  .receipt-header {
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: 13pt;
+    text-transform: uppercase;
+  }
+  
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px dashed #dddddd;
+    padding-bottom: 5px;
+  }
+  
+  .receipt-label {
+    font-weight: bold;
+  }
+  
+  .receipt-footer {
+    margin-top: 25px;
+    border-top: 1.5px solid #000000;
+    padding-top: 12px;
+    text-align: center;
+    font-size: 8.5pt;
+    color: #555555;
+  }
+}
+
+/* Hide print layout on screen */
+.print-receipt-certificate {
+  display: none;
+}
+
+/* Red Digital Stamp Watermark */
+.digital-format-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  font-family: 'Inter', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: rgba(220, 38, 38, 0.07); /* Low-opacity red hologram stamp */
+  border: 4px dashed rgba(220, 38, 38, 0.08);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 3px;
+  z-index: 0;
+  user-select: none;
+}
+
+/* Digital Warning Banner */
+.digital-warning-banner {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness (Fit to Mobile)
+   ========================================================================== */
+@media (max-width: 600px) {
+  .portal-header {
+    padding: 1rem;
+  }
+  
+  .header-logo-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .logo-title-group h1 {
+    font-size: 1.15rem;
+  }
+  
+  .logo-title-group p {
+    font-size: 0.75rem;
+  }
+  
+  .portal-wrapper {
+    margin: 1rem auto;
+    padding: 0 1rem;
+    gap: 1.25rem;
+  }
+  
+  .search-card {
+    padding: 1.25rem;
+  }
+  
+  .verification-form {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .verification-form input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  .search-btn {
+    width: 100%;
+    padding: 0.75rem 0;
+  }
+  
+  .result-card-container {
+    border-radius: 8px;
+  }
+  
+  .status-banner {
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+  }
+  
+  .profile-layout-grid {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+  
+  .photo-wrapper {
+    width: 100px;
+    height: 120px;
+  }
+  
+  .details-table th, .details-table td {
+    font-size: 0.85rem;
+  }
+  
+  .profile-actions-bar {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    gap: 0.75rem;
+  }
+  
+  .action-toggle-btn, .action-print-btn {
+    width: 100%;
+    padding: 0.6rem 0;
+    font-size: 0.85rem;
+  }
+  
+  .original-card-panel .panel-body {
+    padding: 0.5rem 1.25rem 1.25rem 1.25rem;
+  }
+  
+  .original-card-panel img {
+    width: 100%;
+  }
+  
+  .digital-format-stamp {
+    font-size: 1.4rem;
+    padding: 0.4rem 0.8rem;
+    border-width: 2.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack table rows on tiny screens for perfect fit */
+  .details-table tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.6rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.25rem;
+  }
+  
+  .details-table tr:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .details-table th, .details-table td {
+    width: 100% !important;
+    padding: 0.1rem 0 !important;
+    border: none !important;
+  }
+  
+  .details-table th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+  
+  .details-table td {
+    font-size: 0.9rem;
+  }
+  
+  .details-table td.val-name {
+    font-size: 1rem;
+  }
+}
+
+/* Screenshot Protection Overlay styling */
+.screen-protection-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #020617;
+  z-index: 100000;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+.protection-message {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 450px;
+}
+
+.protection-message h2 {
+  font-size: 1.25rem;
+  color: #ef4444;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.protection-message p {
+  font-size: 0.88rem;
+  color: #94a3b8;
+}
+
+/* Watermark over physical ID card scan */
+.physical-image-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.physical-card-overlay-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  color: rgba(220, 38, 38, 0.45);
+  border: 3.5px dashed rgba(220, 38, 38, 0.45);
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  pointer-events: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  background-color: rgba(254, 242, 242, 0.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Selection and Drag protection on body */
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
